@@ -1,0 +1,62 @@
+{%extends 'base.html'%}
+
+{%block content%}
+<section style="background-color: gainsboro;padding-top: 5rem;padding-bottom: 5rem;">
+    <div class="container card shadow col-md-7">
+       <form class="row mt-3" action="" method="post">
+           {%csrf_token%}
+  <div class="col-md-7">
+    <input type="text"  class="form-control" id="staticUrl" name="URL" placeholder="Paste URL" >
+  </div>
+  <div class="col-3">
+    <input type="test" class="form-control"  placeholder="Alias" name="alias">
+  </div>
+  <div class="col-2">
+    <button type="submit" class="btn btn-primary mb-3">Short URL</button>
+  </div>
+</form>
+    </div>
+    <div class="container card shadow col-md-7 mt-4" >
+       <table class="table table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">SrNo</th>
+      <th scope="col">URL</th>
+      <th scope="col">Shorted URL</th>
+      <th scope="col">Date Time</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for url in request.user.url_set.all %}
+    <tr>
+      <th scope="row">1</th>
+      <td>
+          <input type="text" value="{{url.target_url}}" title="{{url.target_url}}" class="form-control"  readonly>
+      </td>
+      <td class="d-flex align-item-center">
+          <span>
+              <input type="text" value="{{domain}}/{{url.alias}}" title="{{domain}}/{{url.alias}}" id="shorted-{{url.id}}" class="form-control" readonly>
+          </span>
+          <button class="btn P-0" onclick="copyText({{url.id}})">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi ml-2 bi-sticky-fill" viewBox="0 0 16 16">
+                 <path d="M2.5 1A1.5 1.5 0 0 0 1 2.5v11A1.5 1.5 0 0 0 2.5 15h6.086a1.5 1.5 0 0 0 1.06-.44l4.915-4.914A1.5 1.5 0 0 0 15 8.586V2.5A1.5 1.5 0 0 0 13.5 1h-11zm6 8.5a1 1 0 0 1 1-1h4.396a.25.25 0 0 1 .177.427l-5.146 5.146a.25.25 0 0 1-.427-.177V9.5z"/>
+             </svg>
+          </button>
+      </td>
+      <td>{{url.timestamp}}</td>
+    </tr>
+    {%endfor%}
+  </tbody>
+</table>
+    </div>
+</section>
+<script>
+function copyText(id){
+    var inputTag = document.getElementById('shorted- ${id}')
+    inputTag.document.text.select()
+    document.execCommand('copy');
+
+}
+</script>
+
+{%endblock content%}
